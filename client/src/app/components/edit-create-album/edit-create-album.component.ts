@@ -30,7 +30,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class EditCreateAlbumComponent implements OnInit, OnDestroy {
   public album: Partial<IAlbum> = this.initializeAlbum();
-  public albumForm: FormGroup;
+  public albumForm: FormGroup | undefined;
   public mode: "edit" | "create" | undefined;
   private destroy$ = new Subject<void>();
   private readonly handlersOnSubscribe = {
@@ -43,21 +43,14 @@ export class EditCreateAlbumComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: {album: Partial<IAlbum>},
     public dialogRef: MatDialogRef<AlbumDetailComponent>,
     private formbuilder: FormBuilder,
     private albumsService: AlbumsService
-  ) {
-    this.albumForm = this.formbuilder.group({
-      artist_name: ['', Validators.required],
-      album_title: ['', Validators.required],
-      release_date: [''],
-      genre: [''],
-      record_label: [''],
-    });
-  }
+  ) {}
 
   public ngOnInit(): void {
+    this.albumForm = this.createAlbumForm()
     this.albumForm.patchValue(this.album);
   }
 
@@ -71,7 +64,7 @@ export class EditCreateAlbumComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    if (this.albumForm.valid) {
+    if (this.albumForm?.valid) {
       const updatedAlbum: IAlbum = { ...this.album, ...this.albumForm.value };
       delete updatedAlbum.cover_base64;
       this.sendUpdatedOrCreatedAlbum(updatedAlbum);
@@ -112,5 +105,15 @@ export class EditCreateAlbumComponent implements OnInit, OnDestroy {
       cover_base64: '',
       number_of_ratings: 0
     };
+  }
+
+  private createAlbumForm(): FormGroup {
+    return this.formbuilder.group({
+      artist_name: ['', Validators.required],
+      album_title: ['', Validators.required],
+      release_date: [''],
+      genre: [''],
+      record_label: [''],
+    });
   }
 }

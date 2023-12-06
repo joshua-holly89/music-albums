@@ -14,7 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { Album, AlbumsService } from '../../../../api_client';
-import { Observable, Subject, map, shareReplay, takeUntil } from 'rxjs';
+import { Observable, Subject, catchError, map, of, shareReplay, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { AlbumDetailComponent } from '../album-detail/album-detail.component';
 import { EditCreateAlbumComponent } from '../edit-create-album/edit-create-album.component';
@@ -35,12 +35,12 @@ import { EditCreateAlbumComponent } from '../edit-create-album/edit-create-album
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlbumOverviewComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   public albumsService = inject(AlbumsService);
   public albums$: Observable<IAlbum[]> = this.albumsService
     .albumControllerFindAll()
-    .pipe(shareReplay(1));
+    .pipe(takeUntil(this.destroy$),shareReplay(1));
   private dialog = inject(MatDialog);
-  private destroy$ = new Subject<void>();
   private cd: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   public ngOnDestroy(): void {
@@ -49,17 +49,22 @@ export class AlbumOverviewComponent implements OnDestroy {
   }
 
   public rate(album: IAlbum, rating: number): void {
-    album.rating = rating;
     this.albumsService
       .albumControllerRate(album.id, { rating })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((error) => {
+          alert('Error rating album:' + error);
+          return of(null);
+        })
+      )
       .subscribe((updatedAlbum: Album) => {
         this.updateAlbumLocally(updatedAlbum);
       });
   }
 
   public getEmptyOrFilledStar(album: IAlbum, numberOfStar: number): string {
-    if (album.rating && album.rating >= numberOfStar) {
+    if (album.rating != null && album.rating >= numberOfStar) {
       return '★';
     } else {
       return '✰';

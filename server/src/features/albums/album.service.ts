@@ -26,12 +26,15 @@ export class AlbumService {
   }
 
   async remove(id: number): Promise<void> {
-    const album = await this.albumRepository.findOne({ where: { id } });
+    const album = await this.findOne(id);
 
     if (!album) {
       throw new NotFoundException('Album not found');
     }
 
+    // condition is checking for rating higher than 3,
+    // because rating is shifted by 1 (starting at 0 instead of 1).
+    // so what is 3 in code, appears as 4 for the user
     if (album.rating && album.rating > 3 && album.number_of_ratings >= 10) {
       throw new BadRequestException(
         'Cannot delete album with rating higher than 4 and 10 or more ratings',
