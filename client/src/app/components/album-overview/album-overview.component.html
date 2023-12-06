@@ -1,0 +1,59 @@
+<div class="margin-container">
+  <h1 class="heading">AI generated albums</h1>
+  <div *ngIf="(albums$ | async) == null; else albumList" class="spinner-container">
+    <h2>Loading...</h2>
+    <mat-spinner></mat-spinner>
+  </div>
+</div>
+
+<ng-template #albumList>
+  <div class="flex-container">
+    <mat-card *ngFor="let album of albums$ | async; trackBy: trackByAlbums">
+      <mat-card-header (click)="showDetails(album)">
+        <mat-card-title>
+          <h1>
+            {{album.album_title}}
+          </h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <img *ngIf="album.cover_base64" [src]="'data:image/jpeg;base64,' + album.cover_base64" alt="Album cover" (click)="showDetails(album)">
+        <div class="rating-container">
+          <mat-label class="rating-text">Your rating: </mat-label>
+          <span class="star" *ngFor="let number of [0,1,2,3,4]"
+            (click)="rate(album, number)">{{getEmptyOrFilledStar(album, number)}}</span>
+        </div>
+        <div class="number-of-ratings-container">
+          <mat-label class="rating-text">Number of ratings: </mat-label>
+          <span class="rating-text">
+            {{album.number_of_ratings}}
+          </span>
+        </div>
+        <div class="button-container">
+          <button mat-fab aria-label="delete" (click)="delete(album)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-fab aria-label="edit" (click)="edit(album)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="create-album-card">
+      <mat-card-header>
+        <mat-card-title>
+          <h1>
+            Create new album
+          </h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="button-container">
+          <button mat-fab color="primary" aria-label="create" (click)="create()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>

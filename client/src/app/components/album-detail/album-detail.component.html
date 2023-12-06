@@ -1,0 +1,23 @@
+<mat-card>
+  <div class="close-button-container">
+    <button mat-fab color="accent" (click)="closeDialog()"><mat-icon>close</mat-icon></button>
+  </div>
+  <mat-card-header>
+    <mat-card-title>
+      <h1>
+        {{album.album_title}}
+      </h1>
+      <h2>
+        {{data.album.artist_name}}
+      </h2>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <img *ngIf="album.cover_base64" [src]="'data:image/jpeg;base64,' + album.cover_base64" alt="Album cover">
+    <div class="info-container">
+      <p>Release Date: {{data.album.release_date | date}}</p>
+      <p>Genre: {{data.album.genre}}</p>
+      <p>Record Label: {{data.album.record_label}}</p>
+    </div>
+    </mat-card-content>
+</mat-card>

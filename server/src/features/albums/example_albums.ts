@@ -1,0 +1,125 @@
+import { Album } from './album.entity';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+function imageToBase64(imageFileName: string): string {
+  const image = readFileSync(
+    join(__dirname, '../../../../../assets/album_covers', imageFileName),
+  );
+  return Buffer.from(image).toString('base64');
+}
+
+export function getExampleAlbums(): Album[] {
+  return [
+    {
+      id: 1,
+      artist_name: 'The Cosmic Drifters',
+      album_title: 'Starlight Serenade',
+      release_date: '2024-07-29',
+      genre: 'Psychedelic Rock',
+      record_label: 'Nebula Sounds',
+      cover_base64: imageToBase64('/1.jfif'),
+      rating: undefined,
+      number_of_ratings: 0,
+    },
+    {
+      id: 2,
+      artist_name: 'Luna Marquez',
+      album_title: 'Echoes of Love',
+      release_date: '2025-02-14',
+      genre: 'Latin Pop',
+      record_label: 'Corazón Records',
+      cover_base64: imageToBase64('2.jfif'),
+      rating: undefined,
+      number_of_ratings: 0,
+    },
+    {
+      id: 3,
+      artist_name: 'DJ Electron',
+      album_title: 'Voltage Vibes',
+      release_date: '2023-05-06',
+      genre: 'EDM',
+      record_label: 'PulseWave Music',
+      cover_base64: imageToBase64('3.jfif'),
+      rating: undefined,
+      number_of_ratings: 0,
+    },
+    {
+      id: 4,
+      artist_name: 'Sapphire Strings Quartet',
+      album_title: 'Classical Reimagined',
+      release_date: '2023-12-01',
+      genre: 'Classical Crossover',
+      record_label: 'Harmony Hall',
+      cover_base64: imageToBase64('4.jfif'),
+      rating: undefined,
+      number_of_ratings: 0,
+    },
+    {
+      id: 5,
+      artist_name: 'The Velvet Undergrounders',
+      album_title: 'Urban Symphony',
+      release_date: '2024-10-31',
+      genre: 'Indie Rock',
+      record_label: 'Subterranean Melodies',
+      cover_base64: imageToBase64('5.jfif'),
+      rating: undefined,
+      number_of_ratings: 0,
+    },
+    {
+      id: 6,
+      artist_name: 'Rhythm & Rhymes',
+      album_title: 'Beats of the Street',
+      release_date: '2025-06-15',
+      genre: 'Hip Hop',
+      record_label: 'Urban Pulse',
+      cover_base64: imageToBase64('6.jfif'),
+      rating: undefined,
+      number_of_ratings: 0,
+    },
+    {
+      id: 7,
+      artist_name: 'Aurora Borealis',
+      album_title: 'Northern Lights',
+      release_date: '2024-01-01',
+      genre: 'Ambient',
+      record_label: 'Ethereal Soundscapes',
+      cover_base64: imageToBase64('7.jfif'),
+      rating: undefined,
+      number_of_ratings: 0,
+    },
+    {
+      id: 8,
+      artist_name: 'The Highlanders',
+      album_title: 'Celtic Echoes',
+      release_date: '2024-03-17',
+      genre: 'Folk',
+      record_label: 'Green Meadow Music',
+      cover_base64: imageToBase64('8.jfif'),
+      rating: undefined,
+      number_of_ratings: 0,
+    },
+    {
+      id: 9,
+      artist_name: 'Melodic Minds',
+      album_title: 'Harmonic Horizons',
+      release_date: '2023-08-20',
+      genre: 'Jazz Fusion',
+      record_label: 'Smooth Grooves',
+      cover_base64: imageToBase64('9.jfif'),
+      rating: undefined,
+      number_of_ratings: 0,
+    },
+    {
+      id: 10,
+      artist_name: 'Solar Flare',
+      album_title: 'Radiant Waves',
+      release_date: '2025-04-05',
+      genre: 'Synthwave',
+      record_label: 'RetroFuture Records',
+      cover_base64: imageToBase64('10.jfif'),
+      rating: undefined,
+      number_of_ratings: 0,
+    },
+  ];
+}
