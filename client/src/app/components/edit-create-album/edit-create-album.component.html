@@ -12,7 +12,7 @@
       </h1>
     </mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content *ngIf="albumForm">
     <form [formGroup]="albumForm" (ngSubmit)="onSubmit()">
       <mat-form-field>
         <mat-label>Album Title</mat-label>
